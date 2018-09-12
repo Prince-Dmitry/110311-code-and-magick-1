@@ -44,6 +44,7 @@ window.renderStatistics = function (ctx, names, times) {
     ctx.fillRect(initialX + (indent * i), initialY - times[i] * step, barWidth, times[i] * step);
     ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
     ctx.fillText(names[i], initialX + (indent * i), initialY + 20);
+    ctx.fillText(times[i].toFixed(0), initialX + (indent * i), initialY - times[i] * step - 10);
 
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
