@@ -54,6 +54,7 @@ var FIREBALLS_COLORS = [
   '#e848d5',
   '#e6e848'];
 
+
 var getRandom = function (startIndex, endIndex) {
   return Math.floor(startIndex + Math.random() * (endIndex - startIndex + 1));
 };
