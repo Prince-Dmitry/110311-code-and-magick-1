@@ -1,49 +1,61 @@
 'use strict';
 
-var setup = document.querySelector('.setup');
-var setupSimilar = document.querySelector('.setup-similar');
-var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
-var setupSimilarList = document.querySelector('.setup-similar-list');
+(function () {
+  // Объявляем константы
+  var ESC_KEYCODE_PRESS = 27;
+  var ENTER_KEYCODE_PRESS = 13;
 
-var firstName = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var lastName = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var coatColor = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-var eyesColor = ['black', 'red', 'blue', 'yellow', 'green'];
+  // Обработчик события нажатия клавиши Esc
+  var escClickHandler = function (evt) {
+    var classTarget = evt.target.className;
+    if (evt.keyCode === ESC_KEYCODE_PRESS && classTarget !== 'setup-user-name') {
+      closePopupSetupWizards();
+    }
+  };
 
-var getRandom = function (startIndex, endIndex) {
-  return Math.floor(startIndex + Math.random() * (endIndex - startIndex + 1));
-};
+  // Функция открывающая окно настроек волшебника
+  var openPopupSetupWizards = function () {
+    setupWizards.classList.remove('hidden');
 
-var getRandomWizzard = function (n) {
-  var arr = [];
-  for (var i = 0; i < n; i++) {
-    arr[i] = {
-      name: firstName[getRandom(0, firstName.length - 1)] + ' ' + lastName[getRandom(0, lastName.length - 1)],
-      coatColor: coatColor[getRandom(0, coatColor.length - 1)],
-      eyesColor: eyesColor[getRandom(0, eyesColor.length - 1)]
-    };
-  }
-  return arr;
-};
+    document.addEventListener('keydown', escClickHandler);
+  };
 
-var renderWizard = function (wizard) {
-  var element = similarWizardTemplate.cloneNode(true);
-  element.querySelector('.setup-similar-label').textContent = wizard.name;
-  element.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-  element.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
-  element.querySelector('.setup-similar-label').style.textAlign = 'center';
-  return element;
-};
+  // Функция закрывающая окно настроек волшебника
+  var closePopupSetupWizards = function () {
+    document.removeEventListener('keydown', escClickHandler);
 
-var collectWizards = function (arr, wizard) {
-  var fragment = document.createDocumentFragment();
-  for (var i = 0; i < arr.length; i++) {
-    fragment.appendChild(wizard(arr[i]));
-  }
-  return fragment;
-};
+    setupWizards.classList.add('hidden');
+  };
 
-var wizards = getRandomWizzard(4);
-setupSimilarList.appendChild(collectWizards(wizards, renderWizard));
-setup.classList.remove('hidden');
-setupSimilar.classList.remove('hidden');
+  var setupWizards = document.querySelector('.setup');
+  var setupClose = setupWizards.querySelector('.setup-close');
+  var setupOpenIcon = document.querySelector('.setup-open-icon');
+
+  // Открытие окна настроек волшебника при клике на иконку
+  setupOpenIcon.addEventListener('click', function () {
+    openPopupSetupWizards();
+  });
+
+  // Открытие окна настроек волшебника при нажатии клавиши enter на иконку
+  setupOpenIcon.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE_PRESS) {
+      openPopupSetupWizards();
+    }
+  });
+
+  // Закрытие окна настроек волшебника при клике на крестик
+  setupClose.addEventListener('click', function () {
+    closePopupSetupWizards();
+  });
+
+  // Закрытие окна настроек волшебника при нажатии клавиши enter на крестик
+  setupClose.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE_PRESS) {
+      closePopupSetupWizards();
+    }
+  });
+
+  var setupSimilarWizards = document.querySelector('.setup-similar');
+  setupSimilarWizards.classList.remove('hidden');
+
+})();
